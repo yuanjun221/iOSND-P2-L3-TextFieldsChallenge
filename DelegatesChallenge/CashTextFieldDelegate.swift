@@ -11,34 +11,36 @@ import UIKit
 
 class CashTextFieldDelegate: NSObject, UITextFieldDelegate {
     
-
+    private lazy var formatter: NSNumberFormatter = {
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .CurrencyStyle
+        formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        return formatter
+    }()
+    
     func textFieldDidBeginEditing(textField: UITextField) {
         textField.text = "$0.00"
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
-        let formatterForCurrency = NSNumberFormatter()
-        formatterForCurrency.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        formatterForCurrency.numberStyle = NSNumberFormatterStyle.CurrencyStyle
-        
         let currentText = textField.text!
-        let currentValue = formatterForCurrency.numberFromString(currentText)!.doubleValue
+        let currentValue = formatter.numberFromString(currentText)!.doubleValue
         
         var resultText = currentText
         var resultValue = currentValue
         
         if string == "" {
             resultText = resultText.substringToIndex(resultText.endIndex.advancedBy(-1))
-            resultValue = formatterForCurrency.numberFromString(resultText)!.doubleValue
+            resultValue = formatter.numberFromString(resultText)!.doubleValue
             resultValue = resultValue / 10
             
-            resultText = formatterForCurrency.stringFromNumber(resultValue as NSNumber)!
+            resultText = formatter.stringFromNumber(resultValue as NSNumber)!
             resultText = resultText + " "
             textField.text = resultText
         } else {
             resultValue = currentValue * 10
-            resultText = formatterForCurrency.stringFromNumber(resultValue as NSNumber)!
+            resultText = formatter.stringFromNumber(resultValue as NSNumber)!
             resultText = resultText.substringToIndex(resultText.endIndex.advancedBy(-1))
             textField.text = resultText
         }
