@@ -11,6 +11,7 @@ import UIKit
 
 class CashTextFieldDelegate: NSObject, UITextFieldDelegate {
     
+
     func textFieldDidBeginEditing(textField: UITextField) {
         textField.text = "$0.00"
     }
@@ -18,9 +19,11 @@ class CashTextFieldDelegate: NSObject, UITextFieldDelegate {
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         let formatterForCurrency = NSNumberFormatter()
-        formatterForCurrency.numberStyle = .CurrencyStyle
+        formatterForCurrency.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        formatterForCurrency.numberStyle = NSNumberFormatterStyle.CurrencyStyle
         
-        let currentValue = formatterForCurrency.numberFromString(textField.text!)!.doubleValue
+        let currentText = textField.text!
+        let currentValue = formatterForCurrency.numberFromString(currentText)!.doubleValue
         var resultValue = currentValue
         var resultText = textField.text
 
