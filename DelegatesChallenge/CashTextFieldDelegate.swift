@@ -24,21 +24,22 @@ class CashTextFieldDelegate: NSObject, UITextFieldDelegate {
         
         let currentText = textField.text!
         let currentValue = formatterForCurrency.numberFromString(currentText)!.doubleValue
+        
+        var resultText = currentText
         var resultValue = currentValue
-        var resultText = textField.text
-
+        
         if string == "" {
-            resultText = resultText!.substringToIndex(resultText!.endIndex.advancedBy(-1))
-            resultValue = formatterForCurrency.numberFromString(resultText!)!.doubleValue
+            resultText = resultText.substringToIndex(resultText.endIndex.advancedBy(-1))
+            resultValue = formatterForCurrency.numberFromString(resultText)!.doubleValue
             resultValue = resultValue / 10
             
-            resultText = formatterForCurrency.stringFromNumber(resultValue as NSNumber)
-            resultText = resultText! + " "
+            resultText = formatterForCurrency.stringFromNumber(resultValue as NSNumber)!
+            resultText = resultText + " "
             textField.text = resultText
         } else {
             resultValue = currentValue * 10
-            resultText = formatterForCurrency.stringFromNumber(resultValue as NSNumber)
-            resultText = resultText!.substringToIndex(resultText!.endIndex.advancedBy(-1))
+            resultText = formatterForCurrency.stringFromNumber(resultValue as NSNumber)!
+            resultText = resultText.substringToIndex(resultText.endIndex.advancedBy(-1))
             textField.text = resultText
         }
         return true
